@@ -3,7 +3,6 @@
   "version": "1.0.1",
   "description": "Libreria de web components",
   "main": "index.js",
-  "browser": "index.js",
   "type": "module",
   "repository": {
     "type": "git",
