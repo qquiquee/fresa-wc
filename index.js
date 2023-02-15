@@ -1,10 +1,10 @@
-export const fresaLogin = () => {
-	customElements.define('fresa-login', class extends HTMLElement {
-		constructor() {
-			super();
-			const root = this.attachShadow({ mode: 'open' });
-			const div = document.createElement('div');
-			div.innerHTML = `
+// export const fresaLogin = () => {
+customElements.define('fresa-login', class extends HTMLElement {
+	constructor() {
+		super();
+		const root = this.attachShadow({ mode: 'open' });
+		const div = document.createElement('div');
+		div.innerHTML = `
 			<div id="fresa-login" class="web-component">
 		<style>
 	/* Pantalla completa */
@@ -84,56 +84,56 @@ export const fresaLogin = () => {
 		</div>
 	</div>
 			`
-			// función para realizar el login
-			async function login(user, pass) {
-				console.log('login')
-				// const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6eyJpdiI6Ijk4NTIyOTYzNjNkY2Q5YzJiOTkxNGRhOGFmZDcxYTU1IiwiY29udGVudCI6IjE2ZjdkZDdlMmY0ZDQ1OTFlYiJ9LCJpYXQiOjE2Njc0MDcxNjgsImV4cCI6MTY2NzQ5MzU2OH0.WkzgRUImW1xGgmh1vFWJz1K6EgjncoiLWte7K790gKU'
-				const api = 'https://factu.neuralchess.es/'
-				const controller = new AbortController();
-				setTimeout(() => controller.abort(), 6000);
-				const signal = controller.signal;
-				let options = {
-					method: 'POST',
-					signal: signal,
-					headers: {
-						'content-type': 'application/json'
-					},
-					body: JSON.stringify(
-						{
-							"user_name": user,
-							"password": pass
-						}
-					)
-				}
-				const peticion = new Request(`${api}login`, options)
-				fetch(peticion)
-					.then(response => { return response.json(); })
-					.then(data => {
-						if (data.error) { alert('Las credenciales no son correctas: ', data.error) }
-						else { localStorage.setItem('tokenM', data.tokenM); }
-					})
-					.catch(error => { errorFetch(error) });
+		// función para realizar el login
+		async function login(user, pass) {
+			console.log('login')
+			// const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6eyJpdiI6Ijk4NTIyOTYzNjNkY2Q5YzJiOTkxNGRhOGFmZDcxYTU1IiwiY29udGVudCI6IjE2ZjdkZDdlMmY0ZDQ1OTFlYiJ9LCJpYXQiOjE2Njc0MDcxNjgsImV4cCI6MTY2NzQ5MzU2OH0.WkzgRUImW1xGgmh1vFWJz1K6EgjncoiLWte7K790gKU'
+			const api = 'https://factu.neuralchess.es/'
+			const controller = new AbortController();
+			setTimeout(() => controller.abort(), 6000);
+			const signal = controller.signal;
+			let options = {
+				method: 'POST',
+				signal: signal,
+				headers: {
+					'content-type': 'application/json'
+				},
+				body: JSON.stringify(
+					{
+						"user_name": user,
+						"password": pass
+					}
+				)
 			}
-			root.appendChild(div);
-			const comprobar = root.getElementById('btnLogin');
-			const usuario = root.getElementById('username');
-			const password = root.getElementById('password');
-
-			comprobar.addEventListener('click', function (e) {
-				login(usuario.textContent, password.textContent);
-			});
+			const peticion = new Request(`${api}login`, options)
+			fetch(peticion)
+				.then(response => { return response.json(); })
+				.then(data => {
+					if (data.error) { alert('Las credenciales no son correctas: ', data.error) }
+					else { localStorage.setItem('tokenM', data.tokenM); }
+				})
+				.catch(error => { errorFetch(error) });
 		}
-	});
-}
+		root.appendChild(div);
+		const comprobar = root.getElementById('btnLogin');
+		const usuario = root.getElementById('username');
+		const password = root.getElementById('password');
+
+		comprobar.addEventListener('click', function (e) {
+			login(usuario.textContent, password.textContent);
+		});
+	}
+});
+// }
 
 
-export const fresaModal = () => {
-	customElements.define('fresa-modal', class extends HTMLElement {
-		constructor() {
-			super();
-			const root = this.attachShadow({ mode: 'open' });
-			const div = document.createElement('div');
-			div.innerHTML = `
+// export const fresaModal = () => {
+customElements.define('fresa-modal', class extends HTMLElement {
+	constructor() {
+		super();
+		const root = this.attachShadow({ mode: 'open' });
+		const div = document.createElement('div');
+		div.innerHTML = `
 				<style>
 				* {
 				  padding: 0;
@@ -270,37 +270,129 @@ export const fresaModal = () => {
 				</div>
 				`
 
-			root.appendChild(div);
+		root.appendChild(div);
 
-			const openEls = root.querySelectorAll("[data-open]");
-			const closeEls = root.querySelectorAll("[data-close]");
-			const isVisible = "is-visible";
+		const openEls = root.querySelectorAll("[data-open]");
+		const closeEls = root.querySelectorAll("[data-close]");
+		const isVisible = "is-visible";
 
-			for (const el of openEls) {
-				el.addEventListener("click", function () {
-					const modalId = this.dataset.open;
-					root.getElementById(modalId).classList.add(isVisible);
-				});
-			}
-
-			for (const el of closeEls) {
-				el.addEventListener("click", function () {
-					this.parentElement.parentElement.parentElement.classList.remove(isVisible);
-				});
-			}
-
-			root.addEventListener("click", e => {
-				if (e.target == root.querySelector(".modal.is-visible")) {
-					root.querySelector(".modal.is-visible").classList.remove(isVisible);
-				}
-			});
-
-			root.addEventListener("keyup", e => {
-				// if we press the ESC
-				if (e.key == "Escape" && root.querySelector(".modal.is-visible")) {
-					root.querySelector(".modal.is-visible").classList.remove(isVisible);
-				}
+		for (const el of openEls) {
+			el.addEventListener("click", function () {
+				const modalId = this.dataset.open;
+				root.getElementById(modalId).classList.add(isVisible);
 			});
 		}
-	});
-}
+
+		for (const el of closeEls) {
+			el.addEventListener("click", function () {
+				this.parentElement.parentElement.parentElement.classList.remove(isVisible);
+			});
+		}
+
+		root.addEventListener("click", e => {
+			if (e.target == root.querySelector(".modal.is-visible")) {
+				root.querySelector(".modal.is-visible").classList.remove(isVisible);
+			}
+		});
+
+		root.addEventListener("keyup", e => {
+			// if we press the ESC
+			if (e.key == "Escape" && root.querySelector(".modal.is-visible")) {
+				root.querySelector(".modal.is-visible").classList.remove(isVisible);
+			}
+		});
+	}
+});
+// }
+// export const fresaProgress = () => {
+customElements.define('fresa-progress', class extends HTMLElement {
+
+	static get observedAttributes() {
+		return ["percent", "colorfuera", "colordentro"];
+	}
+
+	constructor() {
+		super();
+
+		this.attachShadow({ mode: "open" });
+
+		const style = document.createElement("style");
+		const fill = document.createElement("div");
+
+		style.innerHTML = `
+	:host {
+			display: block;
+			width: 100%;
+			height: 20px;
+			background: #8F3A8470;
+			border-radius: 4px;
+			overflow: hidden;
+	}
+
+	.fill {
+			width: 0%;
+			height: 100%;
+			background: var(--fill-color, #8F3A84);
+			transition: width 0.25s;
+	}
+`;
+
+		fill.classList.add("fill");
+
+		this.shadowRoot.append(style, fill);
+	}
+
+	get percent() {
+		const value = this.getAttribute("percent");
+
+		if (isNaN(value)) {
+			return 0;
+		}
+
+		if (value < 0) {
+			return 0;
+		}
+
+		if (value > 100) {
+			return 100;
+		}
+
+		return Number(value);
+	}
+	get colorfuera() {
+		const value = this.getAttribute("colorfuera");
+		return value;
+	}
+	get colordentro() {
+		const value = this.getAttribute("colordentro");
+		return value;
+	}
+
+	set percent(value) {
+		this.setAttribute("percent", value);
+	}
+	set colorfuera(value) {
+		this.setAttribute("colorfuera", value);
+	}
+	set colordentro(value) {
+		this.setAttribute("colordentro", value);
+	}
+
+	attributeChangedCallback(name) {
+		if (name === "percent") {
+			this.shadowRoot.querySelector(".fill").style.width = `${this.percent}%`;
+		}
+
+		if (name === "colordentro") {
+			this.shadowRoot.querySelector(".fill").style.background = `${this.colordentro}`;
+		}
+		
+		if (name === "colorfuera") {
+			this.shadowRoot.querySelector(":host()").style.background = `${this.colorfuera}`;
+		}
+	}
+
+});
+// }
+
+
